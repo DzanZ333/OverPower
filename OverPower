@@ -1,0 +1,400 @@
+local OrionLib = loadstring(game:HttpGet(('https://pastebin.com/raw/WRUyYTdY')))()
+local Window = OrionLib:MakeWindow({Name = "DzanZ Hub | OverPower", HidePremium = false, IntroText = "DzanZ Hub, Loading...", SaveConfig = true, ConfigFolder = "DzanZ333 OP"})
+
+--Value
+
+_G.autoCR = true
+
+_G.autoDagon = true
+
+_G.autoChoso = true
+
+_G.autoHiten = true
+
+_G.autoOctopus = true
+
+--Functions
+
+function autoCR()
+    while _G.autoCR == true do
+        game:GetService("Players").LocalPlayer.Character.ReversalTechnique.RemoteEvent:FireServer()
+        wait(6)
+    end
+end
+
+function autoDagon()
+    while _G.autoDagon == true do
+local args = {
+
+    [1] = "Dagon",
+
+    [2] = "UseC"
+
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaEvent"):FireServer(unpack(args))       
+        wait(1)
+    end
+end
+
+function autoChoso()
+    while _G.autoChoso == true do
+        local args = {
+
+[1] = "Choso",
+
+[2] = "UseC"
+
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaEvent"):FireServer(unpack(args))
+        wait(1)
+    end
+end
+
+function autoHiten()
+    while _G.autoHiten == true do
+        local args = {
+ 
+[1] = "Heian",
+ 
+[2] = "UseZ"
+
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaEvent"):FireServer(unpack(args))
+        wait(1)
+    end
+end
+
+function autoOctopus()
+    while _G.autoOctopus == true do
+        local args = {
+    
+[1] = "Dagon",
+ 
+[2] = "UseX"
+
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaEvent"):FireServer(unpack(args))
+        wait(1)
+    end
+end
+
+local Tab = Window:MakeTab({
+Name = "Main",
+Icon = "rbxassetid://4483345998",
+PremiumOnly = false
+})
+
+OrionLib:MakeNotification({
+Name = "Great Notification",
+Content = "DzanZ Hub Made By DzanZ333",
+Image = "rbxassetid://16103628265",
+Time = 10
+})
+
+--Toggles
+
+Tab:AddToggle({
+	Name = "Auto Cursed Reversal",
+	Default = false,
+	Callback = function(Value)
+		_G.autoCR = Value
+    autoCR()
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Auto Dagon",
+	Default = false,
+	Callback = function(Value)
+		_G.autoDagon = Value
+    autoDagon()
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Auto Choso",
+	Default = false,
+	Callback = function(Value)
+		_G.autoChoso = Value
+    autoChoso()
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Auto Hiten",
+	Default = false,
+	Callback = function(Value)
+		_G.autoHiten = Value
+    autoHiten()
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Auto Octopus",
+	Default = false,
+	Callback = function(Value)
+		_G.autoOctopus = Value
+    autoOctopus()
+	end    
+})
+
+--Buttons
+
+Tab:AddButton({
+	Name = "Tengen (Barrier)",
+	Callback = function()
+   		game:GetService("ReplicatedStorage"):WaitForChild("CharacterEvents"):WaitForChild("Tengen"):WaitForChild("NMove"):FireServer()
+      end
+})
+
+local Tab2 = Window:MakeTab({
+Name = "Misc",
+Icon = "rbxassetid://4483345998",
+PremiumOnly = false
+})
+
+local Section = Tab:AddSection({
+	Name = "Use it properly do not make u get caught!"
+})
+
+Tab2:AddSlider({
+	Name = "PlayerSpeed",
+	Min = 16,
+	Max = 500,
+	Default = 16,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "Speed",
+	Callback = function(Value)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+	end    
+})
+
+Tab2:AddButton({
+	Name = "Inf yield",
+	Callback = function()
+      		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hacker3331/HackerHub-Games/main/HackerAdminGames.lua"))()
+  	end    
+})
+
+Tab2:AddButton({
+	Name = "Esp",
+	Callback = function()
+      		_G.FriendColor = Color3.fromRGB(0, 0, 255)
+_G.EnemyColor = Color3.fromRGB(255, 0, 0)
+_G.UseTeamColor = true
+
+--------------------------------------------------------------------
+local Holder = Instance.new("Folder", game.CoreGui)
+Holder.Name = "ESP"
+
+local Box = Instance.new("BoxHandleAdornment")
+Box.Name = "nilBox"
+Box.Size = Vector3.new(1, 2, 1)
+Box.Color3 = Color3.new(100 / 255, 100 / 255, 100 / 255)
+Box.Transparency = 0.7
+Box.ZIndex = 0
+Box.AlwaysOnTop = false
+Box.Visible = false
+
+local NameTag = Instance.new("BillboardGui")
+NameTag.Name = "nilNameTag"
+NameTag.Enabled = false
+NameTag.Size = UDim2.new(0, 200, 0, 50)
+NameTag.AlwaysOnTop = true
+NameTag.StudsOffset = Vector3.new(0, 1.8, 0)
+local Tag = Instance.new("TextLabel", NameTag)
+Tag.Name = "Tag"
+Tag.BackgroundTransparency = 1
+Tag.Position = UDim2.new(0, -50, 0, 0)
+Tag.Size = UDim2.new(0, 300, 0, 20)
+Tag.TextSize = 15
+Tag.TextColor3 = Color3.new(100 / 255, 100 / 255, 100 / 255)
+Tag.TextStrokeColor3 = Color3.new(0 / 255, 0 / 255, 0 / 255)
+Tag.TextStrokeTransparency = 0.4
+Tag.Text = "nil"
+Tag.Font = Enum.Font.SourceSansBold
+Tag.TextScaled = false
+
+local LoadCharacter = function(v)
+	repeat wait() until v.Character ~= nil
+	v.Character:WaitForChild("Humanoid")
+	local vHolder = Holder:FindFirstChild(v.Name)
+	vHolder:ClearAllChildren()
+	local b = Box:Clone()
+	b.Name = v.Name .. "Box"
+	b.Adornee = v.Character
+	b.Parent = vHolder
+	local t = NameTag:Clone()
+	t.Name = v.Name .. "NameTag"
+	t.Enabled = true
+	t.Parent = vHolder
+	t.Adornee = v.Character:WaitForChild("Head", 5)
+	if not t.Adornee then
+		return UnloadCharacter(v)
+	end
+	t.Tag.Text = v.Name
+	b.Color3 = Color3.new(v.TeamColor.r, v.TeamColor.g, v.TeamColor.b)
+	t.Tag.TextColor3 = Color3.new(v.TeamColor.r, v.TeamColor.g, v.TeamColor.b)
+	local Update
+	local UpdateNameTag = function()
+		if not pcall(function()
+			v.Character.Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+			local maxh = math.floor(v.Character.Humanoid.MaxHealth)
+			local h = math.floor(v.Character.Humanoid.Health)
+		end) then
+			Update:Disconnect()
+		end
+	end
+	UpdateNameTag()
+	Update = v.Character.Humanoid.Changed:Connect(UpdateNameTag)
+end
+
+local UnloadCharacter = function(v)
+	local vHolder = Holder:FindFirstChild(v.Name)
+	if vHolder and (vHolder:FindFirstChild(v.Name .. "Box") ~= nil or vHolder:FindFirstChild(v.Name .. "NameTag") ~= nil) then
+		vHolder:ClearAllChildren()
+	end
+end
+
+local LoadPlayer = function(v)
+	local vHolder = Instance.new("Folder", Holder)
+	vHolder.Name = v.Name
+	v.CharacterAdded:Connect(function()
+		pcall(LoadCharacter, v)
+	end)
+	v.CharacterRemoving:Connect(function()
+		pcall(UnloadCharacter, v)
+	end)
+	v.Changed:Connect(function(prop)
+		if prop == "TeamColor" then
+			UnloadCharacter(v)
+			wait()
+			LoadCharacter(v)
+		end
+	end)
+	LoadCharacter(v)
+end
+
+local UnloadPlayer = function(v)
+	UnloadCharacter(v)
+	local vHolder = Holder:FindFirstChild(v.Name)
+	if vHolder then
+		vHolder:Destroy()
+	end
+end
+
+for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+	spawn(function() pcall(LoadPlayer, v) end)
+end
+
+game:GetService("Players").PlayerAdded:Connect(function(v)
+	pcall(LoadPlayer, v)
+end)
+
+game:GetService("Players").PlayerRemoving:Connect(function(v)
+	pcall(UnloadPlayer, v)
+end)
+
+game:GetService("Players").LocalPlayer.NameDisplayDistance = 0
+
+if _G.Reantheajfdfjdgs then
+    return
+end
+
+_G.Reantheajfdfjdgs = ":suifayhgvsdghfsfkajewfrhk321rk213kjrgkhj432rj34f67df"
+
+local players = game:GetService("Players")
+local plr = players.LocalPlayer
+
+function esp(target, color)
+    if target.Character then
+        if not target.Character:FindFirstChild("GetReal") then
+            local highlight = Instance.new("Highlight")
+            highlight.RobloxLocked = true
+            highlight.Name = "GetReal"
+            highlight.Adornee = target.Character
+            highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+            highlight.FillColor = color
+            highlight.Parent = target.Character
+        else
+            target.Character.GetReal.FillColor = color
+        end
+    end
+end
+
+while task.wait() do
+    for i, v in pairs(players:GetPlayers()) do
+        if v ~= plr then
+            esp(v, _G.UseTeamColor and v.TeamColor.Color or ((plr.TeamColor == v.TeamColor) and _G.FriendColor or _G.EnemyColor))
+        end
+    end
+end
+  	end    
+})
+
+Tab2:AddButton({
+	Name = "Anti Lag",
+	Callback = function()
+            local a = tick()
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+wait(.1)
+sethiddenproperty(game.Lighting, "Technology", 2)
+sethiddenproperty(workspace:FindFirstChildOfClass("Terrain"), "Decoration", false)
+settings().Rendering.QualityLevel = 1
+setsimulationradius(0,0)
+game.Lighting.GlobalShadows = false
+game.Lighting.FogEnd = 9e9
+workspace:FindFirstChildOfClass("Terrain").Elasticity = 0
+for b, c in pairs(game:GetDescendants()) do
+    task.spawn(
+        function()
+            wait()
+            if c:IsA("DataModelMesh") then
+                sethiddenproperty(c, "LODX", Enum.LevelOfDetailSetting.Low)
+                sethiddenproperty(c, "LODY", Enum.LevelOfDetailSetting.Low)
+                c.CollisionFidelity = "Hull"
+            elseif c:IsA("UnionOperation") then
+                c.CollisionFidelity = "Hull"
+            elseif c:IsA("Model") then
+                sethiddenproperty(c, "LevelOfDetail", 1)
+            elseif c:IsA("BasePart") then
+                c.Reflectance = 0
+                c.CastShadow = false
+            end
+        end
+    )
+end
+for d, e in pairs(game.Lighting:GetChildren()) do
+    if e:IsA("PostEffect") then
+        e.Enabled = false
+    end
+end
+warn("Low graphics loaded! (" .. math.floor(tick() - a) .. "s)")
+  	end    
+})
+
+local Tab3 = Window:MakeTab({
+Name = "Credit",
+Icon = "rbxassetid://4483345998",
+PremiumOnly = false
+})
+
+local Section = Tab3:AddSection({
+Name = "Made by DzanZ333"
+})
+
+Tab3:AddButton({
+	Name = "Youtube",
+	Callback = function()
+      		setclipboard("DzanZ333")
+  	end    
+})
+
+OrionLib:Init()
