@@ -151,6 +151,13 @@ Tab:AddButton({
       end
 })
 
+Tab:AddButton({
+	Name = "Tengen (Barrier)",
+	Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/DzanZ333/Ye/refs/heads/main/Wyvern",true))()
+      end
+})
+
 local Tab2 = Window:MakeTab({
 Name = "Misc",
 Icon = "rbxassetid://4483345998",
