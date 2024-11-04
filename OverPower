@@ -152,7 +152,7 @@ Tab:AddButton({
 })
 
 Tab:AddButton({
-	Name = "Tengen (Barrier)",
+	Name = "Gamepass",
 	Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/DzanZ333/Ye/refs/heads/main/Wyvern",true))()
       end
