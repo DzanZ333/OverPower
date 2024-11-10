@@ -18,7 +18,7 @@ _G.autoOctopus = true
 function autoCR()
     while _G.autoCR == true do
         game:GetService("Players").LocalPlayer.Character.ReversalTechnique.RemoteEvent:FireServer()
-        wait(6)
+        wait(1)
     end
 end
 
