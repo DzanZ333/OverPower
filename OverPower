@@ -18,7 +18,7 @@ _G.autoOctopus = true
 function autoCR()
     while _G.autoCR == true do
         game:GetService("Players").LocalPlayer.Character.ReversalTechnique.RemoteEvent:FireServer()
-        wait(1)
+        wait()
     end
 end
 
@@ -33,7 +33,7 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaEvent"):FireServer(unpack(args))       
-        wait(1)
+        wait()
     end
 end
 
