@@ -63,7 +63,7 @@ function autoHiten()
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaEvent"):FireServer(unpack(args))
-        wait()
+        wait(0.4)
     end
 end
 
