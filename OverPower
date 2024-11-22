@@ -152,6 +152,23 @@ Tab:AddButton({
 })
 
 Tab:AddButton({
+	Name = "Buff",
+	Callback = function()
+game:GetService("ReplicatedStorage").CharacterEvents.Kashimo.XMove:FireServer()
+game:GetService("ReplicatedStorage").CharacterEvents.MegunaTransform.GMove:FireServer()
+game:GetService("ReplicatedStorage").CharacterEvents.KashimoTransform.GMove:FireServer()
+game:GetService("ReplicatedStorage").CharacterEvents.SixEyesTransform.LMove:FireServer()
+game:GetService("ReplicatedStorage").CharacterEvents.IshigoriTransform.GMove:FireServer()
+game:GetService("ReplicatedStorage").CharacterEvents.Hiten.XMove:FireServer()
+game:GetService("ReplicatedStorage").CharacterEvents.Angel.NMove:FireServer()
+game:GetService("ReplicatedStorage").CharacterEvents["Heavenly Restriction 200%"].LMove:FireServer()
+game:GetService("ReplicatedStorage").CharacterEvents["True Form"].NMove:FireServer()
+game:GetService("ReplicatedStorage").CharacterEvents.SukunaTransform.GMove:FireServer()
+game:GetService("ReplicatedStorage").CharacterEvents.SukunaHeianTransform.GMove:FireServer()
+       end
+})
+
+Tab:AddButton({
 	Name = "Gamepass",
 	Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/DzanZ333/Ye/refs/heads/main/Wyvern",true))()
