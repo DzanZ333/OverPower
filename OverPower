@@ -13,6 +13,8 @@ _G.autoHiten = true
 
 _G.autoOctopus = true
 
+_G.autoBlackhole = true
+
 --Functions
 
 function autoCR()
@@ -82,6 +84,13 @@ game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaE
     end
 end
 
+function autoBlackhole()
+    while _G.autoBlackhole == true do
+game:GetService("ReplicatedStorage").RemoteEvent.information:FireServer("Yuki","UseV")
+        wait(2)
+    end
+end
+
 local Tab = Window:MakeTab({
 Name = "Main",
 Icon = "rbxassetid://4483345998",
@@ -139,6 +148,15 @@ Tab:AddToggle({
 	Callback = function(Value)
 		_G.autoOctopus = Value
     autoOctopus()
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Auto BlackHole",
+	Default = false,
+	Callback = function(Value)
+		_G.autoBlackhole = Value
+    autoBlackhole()
 	end    
 })
 
