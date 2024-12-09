@@ -28,60 +28,28 @@ end
 
 function autoDagon()
     while _G.autoDagon == true do
-local args = {
-
-    [1] = "Dagon",
-
-    [2] = "UseC"
-
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaEvent"):FireServer(unpack(args))       
+game:GetService("ReplicatedStorage").RemoteEvent.information:FireServer("Dagon","UseC")       
         wait(0.5)
     end
 end
 
 function autoChoso()
     while _G.autoChoso == true do
-        local args = {
-
-[1] = "Choso",
-
-[2] = "UseC"
-
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaEvent"):FireServer(unpack(args))
+game:GetService("ReplicatedStorage").RemoteEvent.information:FireServer("Choso","UseC")
         wait(1)
     end
 end
 
 function autoHiten()
     while _G.autoHiten == true do
-        local args = {
- 
-[1] = "Heian",
- 
-[2] = "UseZ"
-
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaEvent"):FireServer(unpack(args))
+game:GetService("ReplicatedStorage").RemoteEvent.information:FireServer("Heian","UseZ")
         wait(0.5)
     end
 end
 
 function autoOctopus()
     while _G.autoOctopus == true do
-        local args = {
-    
-[1] = "Dagon",
- 
-[2] = "UseX"
-
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("TakabaEvent"):FireServer(unpack(args))
+game:GetService("ReplicatedStorage").RemoteEvent.information:FireServer("Dagon","UseX")
         wait(1)
     end
 end
