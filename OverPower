@@ -95,7 +95,7 @@ end
 
 function autoRainbowDragon()
     while _G.autoRainbowDragon == true do
-game:GetService("ReplicatedStorage").RemoteEvent.information:FireServer("Yuki","UseV")
+game:GetService("ReplicatedStorage").RemoteEvent.information:FireServer("Geto","UseC")
         wait(0.2)
     end
 end
