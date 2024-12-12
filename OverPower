@@ -17,6 +17,8 @@ _G.autoBlackhole = true
 
 _G.autoRainbowDragon = true
 
+_G.autoIce = true
+
 --Functions
 
 function autoCR()
@@ -64,6 +66,13 @@ end
 function autoRainbowDragon()
     while _G.autoRainbowDragon == true do
 game:GetService("ReplicatedStorage").RemoteEvent.information:FireServer("Geto","UseC")
+        wait(0.2)
+    end
+end
+
+function autoIce()
+    while _G.autoIce == true do
+game:GetService("ReplicatedStorage").RemoteEvent.information:FireServer("uraume","UseX")
         wait(0.2)
     end
 end
@@ -143,6 +152,15 @@ Tab:AddToggle({
 	Callback = function(Value)
 		_G.autoRainbowDragon = Value
     autoRainbowDragon()
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Auto Ice",
+	Default = false,
+	Callback = function(Value)
+		_G.autoIce = Value
+    autoIce()
 	end    
 })
 
