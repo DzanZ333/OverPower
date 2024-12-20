@@ -19,6 +19,8 @@ _G.autoRainbowDragon = true
 
 _G.autoIce = true
 
+_G.autoCow = true
+
 --Functions
 
 function autoCR()
@@ -73,7 +75,14 @@ end
 function autoIce()
     while _G.autoIce == true do
 game:GetService("ReplicatedStorage").RemoteEvent.information:FireServer("uraume","UseX")
-        wait(0.2)
+        wait()
+    end
+end
+
+function autoCow()
+    while _G.autoCow == true do
+game:GetService("ReplicatedStorage").RemoteEvent.information:FireServer("Meguna","UseX")
+        wait(0.5)
     end
 end
 
@@ -161,6 +170,15 @@ Tab:AddToggle({
 	Callback = function(Value)
 		_G.autoIce = Value
     autoIce()
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Auto Cow",
+	Default = false,
+	Callback = function(Value)
+		_G.autoCow = Value
+    autoCow()
 	end    
 })
 
