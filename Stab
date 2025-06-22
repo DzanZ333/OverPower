@@ -1,0 +1,336 @@
+--// === THEME COLORS ===
+local themes = {
+    Dark = {
+        bg = Color3.fromRGB(30, 30, 30),
+        btn = Color3.fromRGB(100, 100, 255),
+        text = Color3.fromRGB(255, 255, 255),
+        statusOn = Color3.fromRGB(0, 255, 0),
+        statusOff = Color3.fromRGB(255, 0, 0),
+        highlight = Color3.fromRGB(255, 140, 0)
+    },
+    Light = {
+        bg = Color3.fromRGB(245, 245, 245),
+        btn = Color3.fromRGB(70, 130, 180),
+        text = Color3.fromRGB(0, 0, 0),
+        statusOn = Color3.fromRGB(0, 200, 0),
+        statusOff = Color3.fromRGB(255, 60, 60),
+        highlight = Color3.fromRGB(255, 180, 60)
+    }
+}
+local theme = themes[getgenv().PetFinderTheme]
+
+--// === SERVICES ===
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local SoundService = game:GetService("SoundService")
+local LocalPlayer = Players.LocalPlayer
+
+--// === SOUND SETUP ===
+local foundSound = Instance.new("Sound")
+foundSound.Name = "PetFoundSound"
+foundSound.SoundId = "rbxassetid://9118823104" -- ✅ You can replace this with any sound you like
+foundSound.Volume = 1
+foundSound.Parent = SoundService
+
+--// === VARIABLES ===
+local visitedJobIds = {[game.JobId] = true}
+local runningLoop, toggleState, hops = false, true, 0
+local maxHopsBeforeReset = 50
+
+--// === GUI SETUP ===
+local plrGui = LocalPlayer:WaitForChild("PlayerGui")
+local screenGui = Instance.new("ScreenGui", plrGui)
+screenGui.Name = "PetFinderGUI"
+screenGui.ResetOnSpawn = false
+
+local container = Instance.new("Frame", screenGui)
+container.Size = UDim2.new(0, 240, 0, 280)
+container.Position = UDim2.new(0, 10, 0, 10)
+container.BackgroundTransparency = 1
+
+local frame = Instance.new("Frame", container)
+frame.Size = UDim2.new(1, 0, 1, 0)
+frame.Position = UDim2.new(0, 0, 0, 0)
+frame.BackgroundColor3 = theme.bg
+frame.Active, frame.Draggable = true, true
+
+local toggleIcon = Instance.new("TextButton", screenGui)
+toggleIcon.Size = UDim2.new(0, 40, 0, 40)
+toggleIcon.Position = UDim2.new(0, 10, 1, -50)
+toggleIcon.AnchorPoint = Vector2.new(0, 1)
+toggleIcon.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+toggleIcon.Text = "🐾"
+toggleIcon.TextColor3 = Color3.new(1, 1, 1)
+toggleIcon.Font = Enum.Font.SourceSansBold
+toggleIcon.TextScaled = true
+toggleIcon.BackgroundTransparency = 0.2
+
+local isVisible = true
+local tweenTime = 0.4
+local function slideAndFade(show)
+    local goal = {Position = show and UDim2.new(0, 10, 0, 10) or UDim2.new(0, -260, 0, 10)}
+    TweenService:Create(container, TweenInfo.new(tweenTime), goal):Play()
+    for _, v in ipairs(frame:GetDescendants()) do
+        if v:IsA("TextLabel") or v:IsA("TextButton") then
+            TweenService:Create(v, TweenInfo.new(tweenTime), {TextTransparency = show and 0 or 1}):Play()
+            TweenService:Create(v, TweenInfo.new(tweenTime), {BackgroundTransparency = show and 0 or 1}):Play()
+        end
+    end
+end
+
+toggleIcon.MouseButton1Click:Connect(function()
+    isVisible = not isVisible
+    slideAndFade(isVisible)
+end)
+
+local statusLabel = Instance.new("TextLabel", frame)
+statusLabel.Size = UDim2.new(0.6, -10, 0.2, -5)
+statusLabel.Position = UDim2.new(0, 5, 0, 5)
+statusLabel.BackgroundTransparency = 1
+statusLabel.Text = "Status: ON"
+statusLabel.TextColor3 = theme.statusOn
+statusLabel.Font = Enum.Font.SourceSansBold
+statusLabel.TextScaled = true
+
+local toggleBtn = Instance.new("TextButton", frame)
+toggleBtn.Size = UDim2.new(0.4, -10, 0.2, -5)
+toggleBtn.Position = UDim2.new(0.6, 5, 0, 5)
+toggleBtn.BackgroundColor3 = theme.btn
+toggleBtn.TextColor3 = theme.text
+toggleBtn.Text = "Toggle"
+toggleBtn.Font = Enum.Font.SourceSansBold
+toggleBtn.TextScaled = true
+
+local hopBtn = Instance.new("TextButton", frame)
+hopBtn.Size = UDim2.new(1, -10, 0.2, 0)
+hopBtn.Position = UDim2.new(0, 5, 0.25, 0)
+hopBtn.BackgroundColor3 = theme.highlight
+hopBtn.TextColor3 = theme.text
+hopBtn.Text = "Teleport Now"
+hopBtn.Font = Enum.Font.SourceSansBold
+hopBtn.TextScaled = true
+
+local refreshBtn = Instance.new("TextButton", frame)
+refreshBtn.Size = UDim2.new(0.5, -7, 0.2, 0)
+refreshBtn.Position = UDim2.new(0, 5, 0.47, 0)
+refreshBtn.BackgroundColor3 = theme.btn
+refreshBtn.TextColor3 = theme.text
+refreshBtn.Text = "Refresh Check"
+refreshBtn.Font = Enum.Font.SourceSansBold
+refreshBtn.TextScaled = true
+
+local themeBtn = Instance.new("TextButton", frame)
+themeBtn.Size = UDim2.new(0.5, -7, 0.2, 0)
+themeBtn.Position = UDim2.new(0.5, 2, 0.47, 0)
+themeBtn.BackgroundColor3 = theme.btn
+themeBtn.TextColor3 = theme.text
+themeBtn.Text = "Switch Theme"
+themeBtn.Font = Enum.Font.SourceSansBold
+themeBtn.TextScaled = true
+
+local selectedItem = "Quantum Cloner"
+local dropdownBtn = Instance.new("TextButton", frame)
+dropdownBtn.Size = UDim2.new(1, -10, 0.2, 0)
+dropdownBtn.Position = UDim2.new(0, 5, 0.69, 0)
+dropdownBtn.BackgroundColor3 = theme.highlight
+dropdownBtn.TextColor3 = theme.text
+dropdownBtn.Text = "Buy: " .. selectedItem
+dropdownBtn.Font = Enum.Font.SourceSansBold
+dropdownBtn.TextScaled = true
+
+local dropdownFrame = Instance.new("Frame", frame)
+dropdownFrame.Size = UDim2.new(1, -10, 0, 60)
+dropdownFrame.Position = UDim2.new(0, 5, 0.89, 0)
+dropdownFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+dropdownFrame.Visible = false
+dropdownFrame.ZIndex = 10
+Instance.new("UIListLayout", dropdownFrame).Padding = UDim.new(0, 2)
+Instance.new("UIStroke", dropdownFrame).Color = theme.highlight
+
+for _, item in ipairs({"Quantum Cloner", "Invisibility Cloak", "Medusa's Head", "All Seeing Sentry"}) do
+    local itemBtn = Instance.new("TextButton", dropdownFrame)
+    itemBtn.Size = UDim2.new(1, 0, 0, 25)
+    itemBtn.BackgroundColor3 = theme.btn
+    itemBtn.TextColor3 = theme.text
+    itemBtn.Text = item
+    itemBtn.Font = Enum.Font.SourceSansBold
+    itemBtn.TextScaled = true
+    itemBtn.ZIndex = 11
+    itemBtn.MouseButton1Click:Connect(function()
+        selectedItem = item
+        dropdownBtn.Text = "Buy: " .. item
+        dropdownFrame.Visible = false
+        ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Net"):WaitForChild("RF/CoinsShopService/RequestBuy"):InvokeServer(item)
+    end)
+end
+dropdownBtn.MouseButton1Click:Connect(function()
+    dropdownFrame.Visible = not dropdownFrame.Visible
+end)
+
+local creditLabel = Instance.new("TextLabel", frame)
+creditLabel.Size = UDim2.new(1, -10, 0, 20)
+creditLabel.Position = UDim2.new(0, 5, 1, -25)
+creditLabel.BackgroundTransparency = 1
+creditLabel.Text = "Made by DzanZ"
+creditLabel.TextColor3 = theme.text
+creditLabel.Font = Enum.Font.SourceSansBold
+creditLabel.TextScaled = true
+
+local function addESP(model)
+    local part = model:FindFirstChild("HumanoidRootPart") or model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart")
+    if not part then return end
+    local gui = Instance.new("BillboardGui", part)
+    gui.Name = "PetESP"
+    gui.Adornee = part
+    gui.Size = UDim2.new(0, 100, 0, 30)
+    gui.StudsOffset = Vector3.new(0, 3, 0)
+    gui.AlwaysOnTop = true
+    local label = Instance.new("TextLabel", gui)
+    label.Size = UDim2.new(1, 0, 1, 0)
+    label.BackgroundTransparency = 1
+    label.Text = "🎯 Target Pet"
+    label.TextColor3 = Color3.fromRGB(255, 0, 0)
+    label.Font = Enum.Font.SourceSansBold
+    label.TextScaled = true
+end
+
+local function removeESPs()
+    for _, v in ipairs(workspace:GetDescendants()) do
+        if v:IsA("BasePart") and v:FindFirstChild("PetESP") then
+            v.PetESP:Destroy()
+        end
+    end
+end
+
+local function checkForPets()
+    local found = {}
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if obj:IsA("Model") then
+            for _, target in pairs(getgenv().TargetPetNames) do
+                if string.find(string.lower(obj.Name), string.lower(target)) then
+                    if not obj:FindFirstChildWhichIsA("BillboardGui", true) then
+                        addESP(obj)
+                    end
+                    table.insert(found, obj.Name)
+                    break
+                end
+            end
+        end
+    end
+    return found
+end
+
+local function sendWebhook(pets)
+    local embed = {
+        title = "🎯 Pet(s) Detected!",
+        description = table.concat(pets, "\n"),
+        color = 0xFF9900,
+        fields = {
+            {name = "👤 Player", value = "["..LocalPlayer.Name.."](https://www.roblox.com/users/"..LocalPlayer.UserId.."/profile)", inline = true},
+            {name = "🆔 Server JobId", value = "📋 **"..game.JobId.."**", inline = true},
+            {name = "⏰ Timestamp", value = "<t:"..math.floor(os.time())..":F>", inline = false}
+        },
+        footer = {text = "Pet Finder by DzanZ", icon_url = "https://cdn-icons-png.flaticon.com/512/616/616408.png"}
+    }
+
+    local data = HttpService:JSONEncode({content = "@everyone", embeds = {embed}})
+    local req = http_request or request or (syn and syn.request)
+    if req then
+        pcall(function()
+            req({Url = getgenv().webhook, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = data})
+        end)
+    end
+end
+
+local function serverHop()
+    hops += 1
+    if hops >= maxHopsBeforeReset then
+        visitedJobIds = {[game.JobId] = true}
+        hops = 0
+    end
+    local url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"
+    local success, data = pcall(function() return HttpService:JSONDecode(game:HttpGet(url)) end)
+    if success and data and data.data then
+        for _, server in ipairs(data.data) do
+            if server.id ~= game.JobId and not visitedJobIds[server.id] then
+                visitedJobIds[server.id] = true
+                TeleportService:TeleportToPlaceInstance(game.PlaceId, server.id)
+                return
+            end
+        end
+    end
+    TeleportService:Teleport(game.PlaceId)
+end
+
+local function loopCheck()
+    if runningLoop or not toggleState then return end
+    runningLoop = true
+    task.spawn(function()
+        while toggleState do
+            removeESPs()
+            local pets = checkForPets()
+            if #pets > 0 then
+                foundSound:Play()
+                sendWebhook(pets)
+                if autoHideGUI then screenGui.Enabled = false end
+                break
+            else
+                task.wait(2)
+                serverHop()
+            end
+        end
+        runningLoop = false
+    end)
+end
+
+toggleBtn.MouseButton1Click:Connect(function()
+    toggleState = not toggleState
+    statusLabel.Text = toggleState and "Status: ON" or "Status: OFF"
+    statusLabel.TextColor3 = toggleState and theme.statusOn or theme.statusOff
+    if toggleState then loopCheck() end
+end)
+
+refreshBtn.MouseButton1Click:Connect(function()
+    removeESPs()
+    local pets = checkForPets()
+    if #pets > 0 then
+        foundSound:Play()
+        sendWebhook(pets)
+    end
+end)
+
+hopBtn.MouseButton1Click:Connect(serverHop)
+
+themeBtn.MouseButton1Click:Connect(function()
+    getgenv().PetFinderTheme = getgenv().PetFinderTheme == "Dark" and "Light" or "Dark"
+    theme = themes[getgenv().PetFinderTheme]
+    frame.BackgroundColor3 = theme.bg
+    toggleBtn.BackgroundColor3 = theme.btn
+    toggleBtn.TextColor3 = theme.text
+    statusLabel.TextColor3 = toggleState and theme.statusOn or theme.statusOff
+    hopBtn.BackgroundColor3 = theme.highlight
+    hopBtn.TextColor3 = theme.text
+    refreshBtn.BackgroundColor3 = theme.btn
+    refreshBtn.TextColor3 = theme.text
+    themeBtn.BackgroundColor3 = theme.btn
+    themeBtn.TextColor3 = theme.text
+    dropdownBtn.BackgroundColor3 = theme.highlight
+    dropdownBtn.TextColor3 = theme.text
+    creditLabel.TextColor3 = theme.text
+    for _, child in ipairs(dropdownFrame:GetChildren()) do
+        if child:IsA("TextButton") then
+            child.BackgroundColor3 = theme.btn
+            child.TextColor3 = theme.text
+        end
+    end
+    local stroke = dropdownFrame:FindFirstChildWhichIsA("UIStroke")
+    if stroke then stroke.Color = theme.highlight end
+end)
+
+-- Auto-start
+task.delay(2, function()
+    if toggleState then loopCheck() end
+end)
